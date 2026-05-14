@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>D&D 페르소나 메이커 — 당신은 어떤 모험가입니까?</title>
+<meta name="description" content="14개의 질문으로 당신의 D&D 종족, 직업, 성향, 능력치를 찾아드립니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500;1,9..144,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f1ece0;            /* 따뜻한 크림 배경 */
+  --text: #1a1814;          /* 짙은 잉크 */
+  --text-muted: #6b6358;    /* 중간 톤 */
+  --text-faded: #a59c8d;    /* 흐린 톤 (라벨용) */
+  --line: #d8d0bc;          /* 헤어라인 보더 */
+  --line-soft: #e5dfd0;     /* 더 옅은 보더 */
+  --accent: #2d4a3a;        /* 깊은 모스 그린 */
+  --accent-hover: #1f3527;
+  --highlight: #a83c1f;     /* 따뜻한 러스트 (최고치 강조) */
+  --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font-serif: 'Fraunces', 'Pretendard Variable', Georgia, serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { min-height: 100vh; }
+
+body {
+  background: var(--bg);
+  font-family: var(--font-sans);
+  color: var(--text);
+  padding: 3rem 1.5rem 5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 560px;
+  width: 100%;
+}
+
+/* .parchment는 이제 단순 래퍼 */
+.parchment {
+  background: transparent;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+.parchment::before, .parchment::after { display: none; }
+
+.screen { animation: fadeIn 0.5s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ 타이포 ============ */
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-faded);
+  text-align: center;
+}
+
+.center { text-align: center; }
+
+/* ============ 시작 화면 ============ */
+.start-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-faded);
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.start-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(2.4rem, 7vw, 3.4rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  text-align: center;
+  margin-bottom: 0.9rem;
+  font-variation-settings: "opsz" 144;
+}
+
+.start-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.intro {
+  font-family: var(--font-sans);
+  font-size: 0.93rem;
+  line-height: 1.85;
+  color: var(--text);
+  margin: 0 0 1.5rem;
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.start-hint {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--text-faded);
+  margin: 0 0 2.5rem;
+  letter-spacing: 0.01em;
+}
+
+.start-hint .arrow {
+  display: inline-block;
+  margin-left: 0.15em;
+  transition: transform 0.25s ease;
+}
+
+.start-hint:hover .arrow {
+  transform: translateY(2px);
+}
+
+.intro p + p { margin-top: 0.6rem; }
+
+.intro .quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.intro b {
+  font-weight: 600;
+}
+
+/* 시작 화면 일러스트 자리 (3:2 비율, 권장 1536×1024) */
+.hero-illustration {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  background: var(--line-soft);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 2rem 0 2.5rem;
+  position: relative;
+}
+
+.hero-illustration::before {
+  content: 'Illustration · 1536 × 1024';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-faded);
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.hero-illustration img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  background: var(--accent);
+  color: #f7f3e8;
+  border: none;
+  padding: 0.95rem 2.2rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.1s ease;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.btn:hover, .btn:focus-visible {
+  background: var(--accent-hover);
+  outline: none;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-large { padding: 1.05rem 2.6rem; font-size: 1rem; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.btn-ghost:hover, .btn-ghost:focus-visible {
+  background: transparent;
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+/* ============ 질문 화면 ============ */
+.progress-wrap { margin-bottom: 3.5rem; }
+
+.progress-text {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 0.75rem;
+  font-feature-settings: "tnum" 1;
+}
+
+.progress-bar {
+  height: 1px;
+  background: var(--line);
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--text);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.question-text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 4vw, 1.65rem);
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 2.5rem;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  min-height: 2.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.answers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.answer-btn {
+  font-family: var(--font-sans);
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+  padding: 0.95rem 1.25rem;
+  font-size: 0.94rem;
+  font-weight: 400;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.answer-btn:hover, .answer-btn:focus-visible {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+  outline: none;
+}
+
+.answer-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--text-faded);
+  border: none;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.answer-btn:hover .answer-dot,
+.answer-btn:focus-visible .answer-dot {
+  background: var(--bg);
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 2rem;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.4rem 0;
+}
+
+.back-link:hover { color: var(--text); }
+
+/* ============ 결과 화면 ============ */
+.result-title-wrap {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.result-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-faded);
+  margin-bottom: 1.25rem;
+}
+
+.result-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--text);
+  font-size: clamp(1.9rem, 5.2vw, 2.6rem);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  font-variation-settings: "opsz" 144;
+}
+
+.result-title-kr {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: clamp(0.95rem, 2.6vw, 1.05rem);
+  letter-spacing: 0.02em;
+}
+
+.result-block {
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--line);
+  padding: 1.75rem 0;
+  margin: 0;
+  border-radius: 0;
+}
+
+.result-block:last-of-type {
+  border-bottom: 1px solid var(--line);
+}
+
+.block-label {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-faded);
+  margin-bottom: 0.55rem;
+}
+
+.block-name {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  color: var(--text);
+  font-size: 1.4rem;
+  margin-bottom: 0.65rem;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 48;
+}
+
+.block-desc {
+  font-family: var(--font-sans);
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem 2rem;
+  margin-top: 0.4rem;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.stat-name {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  color: var(--text-muted);
+  width: 34px;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--text);
+  width: 22px;
+  text-align: right;
+  font-size: 0.95rem;
+  font-feature-settings: "tnum" 1;
+}
+
+.stat-bar {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.stat-fill {
+  height: 100%;
+  background: var(--text);
+  border-radius: 0;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-row.peak .stat-name,
+.stat-row.peak .stat-value { color: var(--highlight); }
+.stat-row.peak .stat-fill { background: var(--highlight); }
+
+.result-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+
+.share-msg {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.85rem;
+  min-height: 1.2em;
+}
+
+.divider { display: none; }
+
+/* ============ 시작 화면 보조 네비 ============ */
+.secondary-nav {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.nav-link {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0;
+  transition: color 0.15s ease;
+}
+
+.nav-link:hover, .nav-link:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+
+/* ============ 도감 페이지 ============ */
+.page-back {
+  display: inline-block;
+  margin: 0 0 2rem;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0.4rem 0;
+  transition: color 0.15s ease;
+}
+
+.page-back:hover, .page-back:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+
+.browse-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-variation-settings: "opsz" 144;
+}
+
+.browse-subtitle {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.browse-list { margin: 0; }
+
+.browse-item {
+  padding: 1.6rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.browse-item:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.browse-item-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.browse-item-name {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  color: var(--text);
+  font-size: 1.35rem;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 48;
+}
+
+.browse-item-en {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--text-faded);
+  font-weight: 400;
+  font-size: 0.95rem;
+}
+
+.browse-item-desc {
+  font-family: var(--font-sans);
+  font-size: 0.93rem;
+  line-height: 1.85;
+  color: var(--text);
+}
+
+/* ============ 로딩(인트로) 화면 ============ */
+.loading-container {
+  text-align: center;
+  padding: 4rem 0 3rem;
+}
+
+.loading-title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(2.2rem, 6.5vw, 3rem);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin: 1.25rem 0 0.9rem;
+  font-variation-settings: "opsz" 144;
+}
+
+.loading-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 2.75rem;
+  line-height: 1.6;
+}
+
+.loading-note {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--text-faded);
+  margin-top: 1.75rem;
+  letter-spacing: 0.02em;
+}
+
+/* ============ BGM 토글 버튼 ============ */
+.bgm-toggle {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 1.05rem;
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  font-family: var(--font-sans);
+  line-height: 1;
+}
+
+.bgm-toggle:hover, .bgm-toggle:focus-visible {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+  outline: none;
+}
+
+.bgm-toggle.off {
+  color: var(--text-faded);
+}
+
+.bgm-toggle.off::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 1.5px;
+  background: var(--text-faded);
+  transform: rotate(-30deg);
+  pointer-events: none;
+}
+
+.bgm-toggle.off:hover::after,
+.bgm-toggle.off:focus-visible::after {
+  background: var(--bg);
+}
+
+/* ============ 키프레임 ============ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes radarBloom {
+  from { opacity: 0; transform: scale(0.7); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 1; }
+}
+
+/* ============ 로딩 화면 미세 모션 ============ */
+#screen-loading .start-eyebrow    { animation: fadeInUp 0.7s ease-out 0.05s both; }
+#screen-loading .loading-title    { animation: fadeInUp 0.8s ease-out 0.20s both; }
+#screen-loading .loading-subtitle { animation: fadeInUp 0.8s ease-out 0.40s both; }
+#screen-loading .btn              { animation: fadeInUp 0.8s ease-out 0.60s both; }
+#screen-loading .loading-note     { animation: fadeInUp 0.8s ease-out 0.80s both; }
+
+.pulse-note {
+  display: inline-block;
+  animation: gentlePulse 2.5s ease-in-out infinite;
+}
+
+/* ============ 질문 슬라이드 전환 ============ */
+.question-content.animate-in {
+  animation: slideInRight 0.4s ease-out both;
+}
+
+/* ============ 레이더 차트 ============ */
+.radar-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0.4rem auto 1.5rem;
+}
+
+.radar-chart {
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  transform-origin: center;
+}
+
+.radar-bg-poly {
+  fill: rgba(45, 74, 58, 0.025);
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.radar-grid-poly {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 0.5;
+  opacity: 0.55;
+}
+
+.radar-axis-line {
+  stroke: var(--line);
+  stroke-width: 0.5;
+}
+
+.radar-data-poly {
+  fill: var(--accent);
+  fill-opacity: 0.14;
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+
+.radar-label {
+  font-family: var(--font-sans);
+  font-size: 8px;
+  fill: var(--text-faded);
+  text-anchor: middle;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ============ 3×3 성향 그리드 ============ */
+.alignment-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin: 0.7rem auto 1rem;
+  max-width: 200px;
+  aspect-ratio: 1;
+}
+
+.align-cell {
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--text-faded);
+  letter-spacing: 0.04em;
+  transition: background 0.25s ease, color 0.25s ease;
+  opacity: 0;
+}
+
+.align-cell.active {
+  background: var(--accent);
+  color: var(--bg);
+  font-style: normal;
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  body { padding: 2.25rem 1.25rem 4rem; }
+  .stats { grid-template-columns: 1fr; }
+  .start-title { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .result-title { font-size: clamp(1.7rem, 7vw, 2.1rem); }
+}
+</style>
+</head>
+<body>
+<button id="bgm-toggle" class="bgm-toggle" aria-label="BGM 끄기" title="BGM 켜기/끄기">
+  <span class="bgm-icon">♪</span>
+</button>
+<div class="container">
+
+  <!-- ============ 로딩(인트로) 화면 ============ -->
+  <section id="screen-loading" class="screen">
+    <div class="loading-container">
+      <div class="start-eyebrow">D&amp;D Persona Maker</div>
+      <h1 class="loading-title">어서 오세요, 모험가여</h1>
+      <p class="loading-subtitle">술집의 음악과 함께 모험이 시작됩니다.</p>
+      <button class="btn btn-large" id="btn-enter">들어가기</button>
+      <p class="loading-note"><span class="pulse-note">♪</span> 음악은 우측 상단 버튼으로 끌 수 있습니다</p>
+    </div>
+  </section>
+
+  <!-- ============ 시작 화면 ============ -->
+  <section id="screen-start" class="screen" hidden>
+    <div class="parchment">
+      <div class="start-eyebrow">D&amp;D Persona Maker</div>
+      <h1 class="start-title">당신은 어떤 모험가입니까</h1>
+
+      <figure class="hero-illustration">
+        <img src="hero.webp" alt="" onerror="this.style.display='none'" />
+      </figure>
+
+      <div class="intro">
+        <p>한 잔의 에일을 비우며, 술집 구석의 음유시인이 묻습니다.</p>
+        <p class="quote">"당신은 어디서 왔으며, 어떤 일에 칼을 뽑소?"</p>
+        <p>14개의 짧은 질문이 당신의 <b>종족</b>·<b>직업</b>·<b>성향</b>·<b>능력치</b>를 비춰드립니다. 검을 들든 책을 들든, 모험은 곧 당신을 기다립니다.</p>
+      </div>
+
+      <p class="start-hint">테스트 없이 종족 · 직업 도감만 둘러볼 수도 있어요 <span class="arrow">↓</span></p>
+
+      <div class="center">
+        <button class="btn btn-large" id="btn-start">모험 시작하기</button>
+      </div>
+
+      <div class="secondary-nav">
+        <button class="nav-link" id="btn-races">종족 도감 →</button>
+        <button class="nav-link" id="btn-classes">직업 도감 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 질문 화면 ============ -->
+  <section id="screen-question" class="screen" hidden>
+    <div class="parchment">
+      <div class="progress-wrap">
+        <div class="progress-text" id="progress-text">QUESTION 1 / 14</div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:7%"></div></div>
+      </div>
+
+      <div class="question-content" id="question-content">
+        <p class="question-text" id="question-text"></p>
+        <div class="answers" id="answers"></div>
+      </div>
+
+      <div class="center">
+        <button class="back-link" id="btn-back">← 이전 질문</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 결과 화면 ============ -->
+  <section id="screen-result" class="screen" hidden>
+    <div class="parchment">
+      <div class="result-title-wrap">
+        <div class="result-eyebrow">Your Adventurer</div>
+        <div class="result-title" id="result-title-en"></div>
+        <div class="result-title-kr" id="result-title-kr"></div>
+      </div>
+
+      <div class="radar-wrap">
+        <svg class="radar-chart" id="radar-chart" viewBox="0 0 200 200" aria-label="성향 레이더 차트"></svg>
+      </div>
+
+      <div class="result-block">
+        <div class="block-label">Race &nbsp;·&nbsp; 종족</div>
+        <div class="block-name" id="race-name"></div>
+        <div class="block-desc" id="race-desc"></div>
+      </div>
+
+      <div class="result-block">
+        <div class="block-label">Class &nbsp;·&nbsp; 직업</div>
+        <div class="block-name" id="class-name"></div>
+        <div class="block-desc" id="class-desc"></div>
+      </div>
+
+      <div class="result-block">
+        <div class="block-label">Alignment &nbsp;·&nbsp; 성향</div>
+        <div class="alignment-grid" id="align-grid"></div>
+        <div class="block-name" id="align-name"></div>
+        <div class="block-desc" id="align-desc"></div>
+      </div>
+
+      <div class="result-block">
+        <div class="block-label">Ability Scores &nbsp;·&nbsp; 능력치</div>
+        <div class="stats" id="stats"></div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn" id="btn-share">결과 공유</button>
+        <button class="btn btn-ghost" id="btn-restart">다시 굴리기</button>
+      </div>
+      <div class="share-msg" id="share-msg"></div>
+    </div>
+  </section>
+
+  <!-- ============ 종족 도감 ============ -->
+  <section id="screen-races" class="screen" hidden>
+    <div class="parchment">
+      <button class="page-back" id="btn-back-races">← 돌아가기</button>
+      <div class="start-eyebrow">Races</div>
+      <h1 class="browse-title">종족 도감</h1>
+      <p class="browse-subtitle">D&amp;D 세계관의 열두 종족을 만나보세요.</p>
+      <div class="browse-list" id="races-list"></div>
+    </div>
+  </section>
+
+  <!-- ============ 직업 도감 ============ -->
+  <section id="screen-classes" class="screen" hidden>
+    <div class="parchment">
+      <button class="page-back" id="btn-back-classes">← 돌아가기</button>
+      <div class="start-eyebrow">Classes</div>
+      <h1 class="browse-title">직업 도감</h1>
+      <p class="browse-subtitle">D&amp;D 세계관의 열세 직업을 만나보세요.</p>
+      <div class="browse-list" id="classes-list"></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const AXES = ['chaos', 'evil', 'body', 'subtle', 'solo', 'civil', 'arcane'];
+
+const QUESTIONS = [
+  { text: "왕이 내린 법령이 부당하면, 일단 어기고 본다.", axis: "chaos" },
+  { text: "약속 시간? 분위기 좋으면 한 시간쯤 늦어도 괜찮지.", axis: "chaos" },
+  { text: "내 목표 앞을 가로막는 사람이 있다면, 양심의 가책 없이 밀어낸다.", axis: "evil" },
+  { text: "솔직히 착한 사람은 손해 본다. 세상은 그렇게 굴러간다.", axis: "evil" },
+  { text: "복잡한 책을 30분 읽느니, 운동 30분이 낫다.", axis: "body" },
+  { text: "문제가 생기면 머리보다 손발이 먼저 움직인다.", axis: "body" },
+  { text: "정면 돌파보다 빙 둘러 가더라도 들키지 않는 게 낫다.", axis: "subtle" },
+  { text: "전투에서 등 뒤를 노릴 기회가 있다면, 망설일 이유가 없다.", axis: "subtle" },
+  { text: "만 명이 모인 축제보다, 혼자 보내는 책 한 권이 낫다.", axis: "solo" },
+  { text: "여행은 동행자보다 풍경이 더 중요하다.", axis: "solo" },
+  { text: "야영보다는 여관 침대. 검소함은 다음 생에서.", axis: "civil" },
+  { text: "별자리 이름보단 도시 골목 지름길을 더 많이 안다.", axis: "civil" },
+  { text: "안 풀리는 일이 있다면, 아직 적절한 주문을 못 배운 것뿐이다.", axis: "arcane" },
+  { text: "신비한 고서나 룬 문양을 보면 괜히 가슴이 뛴다.", axis: "arcane" },
+];
+
+const ANSWER_OPTIONS = [
+  { label: "매우 동의한다", value:  5 },
+  { label: "동의한다",     value:  2 },
+  { label: "보통이다",     value:  0 },
+  { label: "비동의한다",   value: -2 },
+  { label: "매우 비동의한다", value: -5 },
+];
+
+const RACES = {
+  "인간":      { en: "Human",       coord: { chaos:  0, evil:  0, body:  0, subtle:  0, solo:  0, civil:  3, arcane:  0 } },
+  "하이 엘프": { en: "High Elf",    coord: { chaos: -1, evil: -2, body: -4, subtle:  2, solo:  2, civil:  3, arcane:  7 } },
+  "우드 엘프": { en: "Wood Elf",    coord: { chaos:  3, evil: -2, body: -1, subtle:  4, solo:  3, civil: -6, arcane:  2 } },
+  "드로우":    { en: "Drow",        coord: { chaos:  1, evil:  3, body: -1, subtle:  6, solo:  1, civil: -1, arcane:  5 } },
+  "하프 엘프": { en: "Half-Elf",    coord: { chaos:  1, evil: -1, body: -1, subtle:  0, solo: -4, civil:  1, arcane:  2 } },
+  "드워프":    { en: "Dwarf",       coord: { chaos: -4, evil: -1, body:  5, subtle: -3, solo: -1, civil:  0, arcane: -3 } },
+  "하플링":    { en: "Halfling",    coord: { chaos:  1, evil: -3, body: -2, subtle:  3, solo: -3, civil:  2, arcane: -2 } },
+  "놈":        { en: "Gnome",       coord: { chaos:  3, evil: -2, body: -4, subtle:  2, solo:  0, civil:  1, arcane:  3 } },
+  "하프 오크": { en: "Half-Orc",    coord: { chaos:  2, evil:  1, body:  6, subtle: -4, solo:  2, civil: -2, arcane: -3 } },
+  "티플링":    { en: "Tiefling",    coord: { chaos:  3, evil:  2, body: -1, subtle:  2, solo:  1, civil:  2, arcane:  4 } },
+  "드래곤본":  { en: "Dragonborn",  coord: { chaos: -3, evil:  0, body:  4, subtle: -3, solo:  0, civil:  0, arcane:  1 } },
+  "아시마르":  { en: "Aasimar",     coord: { chaos: -2, evil: -5, body:  0, subtle: -1, solo:  0, civil:  0, arcane:  3 } },
+};
+
+const CLASSES = {
+  "파이터":     { en: "Fighter",    coord: { chaos:  0, evil:  0, body:  5, subtle: -3, solo:  0, civil:  0, arcane: -4 } },
+  "바바리안":   { en: "Barbarian",  coord: { chaos:  4, evil:  0, body:  6, subtle: -5, solo:  0, civil: -4, arcane: -5 } },
+  "팔라딘":     { en: "Paladin",    coord: { chaos: -5, evil: -3, body:  4, subtle: -4, solo: -1, civil:  1, arcane:  0 } },
+  "레인저":     { en: "Ranger",     coord: { chaos:  1, evil: -1, body:  2, subtle:  3, solo:  4, civil: -5, arcane:  0 } },
+  "로그":       { en: "Rogue",      coord: { chaos:  3, evil:  2, body: -1, subtle:  6, solo:  2, civil:  2, arcane: -2 } },
+  "몽크":       { en: "Monk",       coord: { chaos: -3, evil: -1, body:  3, subtle:  3, solo:  3, civil: -1, arcane: -1 } },
+  "위저드":     { en: "Wizard",     coord: { chaos: -2, evil:  0, body: -6, subtle:  2, solo:  2, civil:  3, arcane:  6 } },
+  "소서러":     { en: "Sorcerer",   coord: { chaos:  3, evil:  0, body: -3, subtle:  0, solo:  0, civil:  0, arcane:  6 } },
+  "워락":       { en: "Warlock",    coord: { chaos:  2, evil:  3, body: -3, subtle:  3, solo:  2, civil: -1, arcane:  5 } },
+  "드루이드":   { en: "Druid",      coord: { chaos:  1, evil: -2, body: -2, subtle:  1, solo:  3, civil: -6, arcane:  4 } },
+  "클레릭":     { en: "Cleric",     coord: { chaos: -3, evil: -3, body:  0, subtle: -2, solo: -2, civil:  3, arcane:  2 } },
+  "바드":       { en: "Bard",       coord: { chaos:  3, evil: -1, body: -2, subtle:  3, solo: -5, civil:  2, arcane:  3 } },
+  "아티피서":   { en: "Artificer",  coord: { chaos:  0, evil:  0, body: -3, subtle:  2, solo:  0, civil:  4, arcane:  3 } },
+};
+
+const RACE_DESCS = {
+  "인간":      "수명 70~80년의 D&D 세계에서 가장 흔한 종족. 짧은 시간 안에 어떤 직업이든 익히는 적응력으로 어디서나 만날 수 있고, 어떤 길드에 가도 자연스럽게 섞인다. 만능형이라는 건 다르게 말하면, 어떤 방향으로든 변신할 수 있다는 뜻이다.",
+  "하이 엘프": "엘프 중에서도 도시와 학원에 사는 분파로, 마법 학문에 가장 능하다. 수명 700년 이상을 책과 주문 연구에 바치며, 시전할 수 있는 캔트립(소형 주문) 보너스를 타고난다. 정확히는 '도서관 폐관 시간을 가장 자주 어기는 종족'이며, 인간 대학생들이 가장 시기하는 존재다.",
+  "우드 엘프": "깊은 숲에서 활과 자연 마법을 다루며 사는 엘프 분파. 발이 가볍고 매와 같은 시력을 지녀, 인간이 한 시간 걸려 추적할 자취를 5분 만에 읽는다. 단점이라면, 도시의 인파와 소음을 30분 이상 견디지 못한다는 것.",
+  "드로우":    "지하 세계(언더다크)에 사는 검은 피부와 흰 머리카락의 엘프. 어둠 속에서도 또렷이 보고, 잠입과 마법 검술 모두에 능하다. 단, 지상에 올라오면 햇빛에 약해 늘 모자를 챙겨야 하고, 사람들의 의심 가득한 눈빛은 모자로 가릴 수 없다.",
+  "하프 엘프": "인간과 엘프 사이에서 태어난 혼혈로, 수명은 150~200년. 양쪽 종족의 매력을 모두 물려받아 D&D 세계 최고의 사교가이며, 카리스마 보너스가 기본으로 붙는다. 단점이라면, 인간 친구들에겐 '엘프스럽다' 소리를, 엘프 친척들에겐 '너무 인간 같다'는 소리를 평생 듣는다는 것.",
+  "드워프":    "산을 깎아 도시(드워프 홀드)를 만든 단단한 종족. 수명 350년 동안 광물과 대장 일을 익히며, 독과 마법에 강한 저항을 타고난다. 한 번 한 결정은 망치로도 뽑을 수 없고, 수염은 곧 자존심이며 자존심은 곧 수염이다.",
+  "하플링":    "키 90cm 정도의 작은 종족으로, D&D 룰에서 '행운(Lucky)' 보너스 — 실패 굴림을 한 번 다시 굴리는 능력을 타고난다. 발은 늘 맨발에 털북숭이고, 마음은 늘 고향 마을 식탁 쪽을 향한다. 위기 상황에서도 '일단 차 한 잔 마시고 생각하자'를 외치며, 두 번째 아침식사는 절대 거르지 않는다.",
+  "놈":        "키는 하플링보다 살짝 크지만 호기심은 종족 통틀어 가장 큰 발명·환술의 달인. 수명 500년이지만, 발명 사고로 그걸 다 채우는 놈은 드물다. 만드는 물건의 절반은 폭발하고, 나머지 절반은 가끔 세상을 구한다 — 본인은 그 비율을 따져본 적 없다.",
+  "하프 오크": "인간과 오크 사이의 혼혈로, 종족 평균을 넘는 근력과 분노 시 폭발적인 힘(Relentless Endurance — 죽기 직전에 한 번 버티는 능력)을 지닌다. 어금니가 살짝 나오고 피부가 녹색조라, 술집에 들어가는 순간 모두가 자세를 고쳐 앉는다. 화내면 무섭고 웃으면 더 무섭게 생겼지만, 사실 가장 진심으로 친구를 지키는 종족.",
+  "티플링":    "조상 중에 악마(데빌)가 섞인 인간형 종족. 뿔과 꼬리가 있고 피부는 보랏빛이나 붉은빛이며, 화염 저항과 약간의 어둠 마법을 타고난다. 지나가면 사람들이 흘끔거리고 술집 주인은 카드 결제를 미리 받아두지만, 정작 본인은 그 모든 시선이 익숙해서 자기 자신을 가장 잘 안다.",
+  "드래곤본":  "용의 후예로, 온몸이 비늘로 덮여 있고 입에서 원소 브레스(불·얼음·번개·산성 중 조상 용에 따라 하나)를 뿜는다. 명예와 약속을 비늘만큼이나 단단하게 지키며, 자기소개 첫 줄에 '저는 [어느 용]의 후예입니다'가 들어간다. 가족 모임에 양초가 필요 없다는 점은 의외의 장점.",
+  "아시마르":  "조상 중에 천상(셀레스티얼)의 존재가 섞인 인간형 종족. 몸에서 은은한 빛이 새어 나오고, 약한 치유 능력과 빛 저항을 타고난다. 밤길 무서워하는 친구들에겐 인기 만점이지만, '그냥 빛 좀 줄일 순 없냐'는 핀잔도 그만큼 자주 듣는다.",
+};
+
+const CLASS_DESCS = {
+  "파이터":   "D&D의 모든 무기와 갑옷을 다룰 수 있는 전투의 만능형. 마법사가 한 발 주문을 외울 동안, 파이터는 세 번 더 검을 휘두른다(Extra Attack). HP가 높고 전술 옵션도 풍부해 어떤 파티에 끼어도 제몫을 한다. 전략은 단순하다 — 더 잘 휘두르고, 더 잘 막는다.",
+  "바바리안": "분노(Rage)를 발동해 받는 피해를 줄이고 공격을 강화하는 야성의 전사. 갑옷은 거추장스럽다며 벗어 던지고, 체력은 종족 평균의 두 배다. 약점은 둘 — 분노가 풀린 다음 날의 두통, 그리고 박살난 가구값 청구서.",
+  "팔라딘":   "신 또는 신념에 맹세(Oath)를 한 성기사. 묵직한 갑옷과 검에 더해 약간의 신성 마법(치유·축복·악 처단)까지 다룰 줄 안다. 맹세는 가벼운 말이 아니라서, 매일 아침 5시 기상·무기 정비·기도가 의무. 정의롭다는 건 멋있는 게 아니라 사실 좀 피곤한 일이다.",
+  "레인저":   "활과 추적, 자연 마법을 다루는 야생의 사냥꾼. 적의 발자국 세 개와 부러진 나뭇가지 하나면 사흘 거리를 추적하고, 종종 동물 동료(매·늑대 등)와 함께 다닌다. 자연이 곧 집이고, 도시는 그저 잠깐 들렀다 가는 곳일 뿐이다.",
+  "로그":     "잠입·자물쇠 해제·함정 발견 모든 면에서 최고인 도적 직업. 적의 약점을 노리는 '기습 공격(Sneak Attack)'으로 작은 단검 하나에도 큰 피해를 입힐 수 있다. 들키지 않으면 한 일도 없다는 모토. 등 뒤를 노리는 게 비겁하다고? 그럼 등을 보인 쪽이 책임지면 된다.",
+  "몽크":     "수도원에서 무술과 정신 수련을 닦은 격투가. 무기와 갑옷 없이 맨손과 발만으로 싸우며, 기(Ki) 자원으로 추가 공격·회피·이동을 한다. 갑옷도, 무기도, 가끔은 신발도 없이 산다. 가장 큰 적은 외부의 악당이 아니라 자기 자신의 잡념이다.",
+  "위저드":   "책에서 마법을 배운 학자형 마법사. D&D에서 가장 폭넓고 강력한 주문 목록을 다루지만, 그만큼 도서관에서 12시간씩 책에 묻혀 살아야 한다. 세상을 흔드는 한 줄짜리 주문을 외우는 게 직업. 가장 두려워하는 건 화재가 아니라, 책장 위로 떨어지는 먼지다.",
+  "소서러":   "공부 없이 타고난 혈통(주로 용·야생마법·천상)으로 마법을 쓰는 마법사. 위저드보다 주문 종류는 적지만, 시전이 빠르고 메타매직으로 주문을 자유롭게 변형할 수 있다. 처음 손을 뻗었더니 불이 났고, 그 다음부터는 본능이 됐다. 가족 모임에서 가장 인기 있는 동시에 가장 위험한 멤버.",
+  "워락":     "강력한 존재(악마·옛 존재·요정군주 등)와 계약(Pact)해 힘을 빌려 쓰는 마법사. 주문 슬롯은 적지만 짧은 휴식만 취하면 회복돼, 던전 안에서 가장 꾸준한 마법 화력이다. 단점은 계약서. 가끔 다시 읽어볼수록 새로운 조항이 보이고, 매월 1일은 늘 살짝 긴장된다.",
+  "드루이드": "자연의 힘을 빌려 마법을 쓰는 사제. 동물로 변신(Wild Shape)할 수 있어, 곰으로 적을 박살내거나 모기로 변해 숨어드는 게 가능하다. 도시 사람들 입장에선 이상하지만, 본인 입장에선 옷 갈아입는 정도. 나무에게 인사하는 건 일상이다.",
+  "클레릭":   "신을 섬기며 그 권능으로 마법을 쓰는 사제. D&D에서 가장 안정적인 치유사이자, 중갑과 메이스를 든 채로 보병처럼 싸울 줄도 안다. 신의 목소리를 듣는다고 하면 사람들이 멀리하지만, 부상을 입었을 땐 가장 먼저 찾는 존재다.",
+  "바드":     "음악·시·이야기로 마법을 시전하는 만능 예술가(Jack-of-all-trades). 노래로 적을 잠재우고, 농담으로 협상을 끝내며, 약간의 치유와 약간의 전투까지 모두 가능하다. 가는 곳마다 무대가 있고 어디서든 술값은 무료. 동료들이 가장 많이 하는 말은 '제발 좀 닥쳐.'",
+  "아티피서": "마법과 공학을 결합한 발명가 직업. 마법 도구, 자동인형, 폭발물, 회복 물약 등을 만들어 동료에게 나눠준다. 발명품은 늘 반쯤 완성 상태로 들고 다니며, '이거 누르면 어떻게 되는데요?'라는 질문엔 항상 자신 없게 대답한다.",
+};
+
+const ALIGNMENTS = {
+  "LG": { kr: "질서 선", en: "Lawful Good",
+    desc: "규칙은 약자를 보호하기 위해 존재한다고 믿는 사람. 약속은 무덤까지 지키고, 부당한 법은 정면으로 바꾼다. 동료들이 가장 의지하면서도 가장 답답해하는 타입." },
+  "NG": { kr: "중립 선", en: "Neutral Good",
+    desc: "어떤 깃발 아래 있느냐보다, 옆 사람이 다치지 않는 게 더 중요하다. 법이 도우면 따르고, 법이 막으면 우회한다. 선함은 융통성과 함께 갈 때 가장 강해진다." },
+  "CG": { kr: "혼돈 선", en: "Chaotic Good",
+    desc: "권위는 도구일 뿐, 사람을 다치게 한다면 그 자리에서 깨버린다. 자유와 친절을 모두 사랑하는, 시스템 입장에선 가장 골치 아픈 유형의 영웅." },
+  "LN": { kr: "질서 중립", en: "Lawful Neutral",
+    desc: "법은 법이다. 좋고 나쁨은 그 다음 문제다. 판사, 관료, 군인, 수도사가 잘 어울리는 타입. 신뢰할 수 있지만, 가끔 무섭다." },
+  "TN": { kr: "절대 중립", en: "True Neutral",
+    desc: "선악과 질서의 추를 늘 가운데에 맞추려 한다. 한쪽이 너무 강해지면, 자연스럽게 반대편을 응원하게 된다. 균형이 곧 신념이며, 신념이 곧 균형." },
+  "CN": { kr: "혼돈 중립", en: "Chaotic Neutral",
+    desc: "오늘은 영웅, 내일은 술집 진상. 기분과 충동을 따라간다. 동료들이 가장 예측 못 하지만, 그래서 가끔 결정적 순간에 판을 뒤집기도 한다." },
+  "LE": { kr: "질서 악", en: "Lawful Evil",
+    desc: "규칙을 이용해 이긴다. 법망 안에서 가장 잔인할 수 있는 사람이 누구인지 잘 알고 있다. 계약서는 무기다." },
+  "NE": { kr: "중립 악", en: "Neutral Evil",
+    desc: "선악도 질서도 사치다. 본인의 이익만이 분명한 좌표. 효율적이고, 그래서 더 무섭다. 칭찬해도 일단 의심하라." },
+  "CE": { kr: "혼돈 악", en: "Chaotic Evil",
+    desc: "기분에 따라 누군가의 인생이 흔들린다. 즉흥적이고, 그래서 막을 방법이 없다. 다행히 본인도 자기 인생 계획을 세우지 않는다." },
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  current: 0,
+  answers: new Array(QUESTIONS.length).fill(null),
+};
+
+// 질문 셔플: SHUFFLED_QUESTIONS[i]는 현재 화면 i번째 질문, SHUFFLE_MAP[i]는 해당 질문의 원본 인덱스
+// (state.answers는 항상 원본 인덱스 기준으로 저장 → URL 공유 호환)
+let SHUFFLED_QUESTIONS = [...QUESTIONS];
+let SHUFFLE_MAP = QUESTIONS.map((_, i) => i);
+
+function shuffleQuestions() {
+  const indexed = QUESTIONS.map((q, i) => ({ q, originalIdx: i }));
+  for (let j = indexed.length - 1; j > 0; j--) {
+    const k = Math.floor(Math.random() * (j + 1));
+    [indexed[j], indexed[k]] = [indexed[k], indexed[j]];
+  }
+  SHUFFLED_QUESTIONS = indexed.map(x => x.q);
+  SHUFFLE_MAP = indexed.map(x => x.originalIdx);
+}
+
+/* ============================================================
+   LOGIC
+   ============================================================ */
+function computeScores() {
+  const scores = {};
+  AXES.forEach(a => scores[a] = 0);
+  state.answers.forEach((ans, i) => {
+    if (ans === null) return;
+    scores[QUESTIONS[i].axis] += ans;
+  });
+  return scores;
+}
+
+function nearestMatch(scores, candidates) {
+  let bestName = null, bestDist = Infinity;
+  for (const [name, data] of Object.entries(candidates)) {
+    let dist = 0;
+    for (const k of AXES) {
+      dist += (data.coord[k] - scores[k]) ** 2;
+    }
+    if (dist < bestDist) { bestDist = dist; bestName = name; }
+  }
+  return bestName;
+}
+
+function getAlignment(scores) {
+  const law  = scores.chaos < -3 ? 'L' : (scores.chaos > 3 ? 'C' : 'N');
+  const good = scores.evil  < -3 ? 'G' : (scores.evil  > 3 ? 'E' : 'N');
+  let key;
+  if (law === 'L' && good === 'G') key = 'LG';
+  else if (law === 'N' && good === 'G') key = 'NG';
+  else if (law === 'C' && good === 'G') key = 'CG';
+  else if (law === 'L' && good === 'N') key = 'LN';
+  else if (law === 'N' && good === 'N') key = 'TN';
+  else if (law === 'C' && good === 'N') key = 'CN';
+  else if (law === 'L' && good === 'E') key = 'LE';
+  else if (law === 'N' && good === 'E') key = 'NE';
+  else key = 'CE';
+  return key;
+}
+
+function computeStats(scores) {
+  // 1) 각 능력치의 'raw pull' 값 계산 (어느 능력치가 가장 강하게 끌리는지)
+  const raw = {
+    STR: scores.body   *  0.70 - scores.subtle * 0.15,
+    DEX: scores.subtle *  0.60 - scores.body   * 0.20,
+    CON: scores.body   *  0.45 - scores.civil  * 0.35,
+    INT: scores.arcane *  0.60 - scores.body   * 0.25,
+    WIS: scores.solo   *  0.40 - scores.civil  * 0.25 + scores.arcane * 0.10,
+    CHA: -scores.solo  *  0.70,
+  };
+
+  // 2) raw 값으로 능력치 순위 매김
+  const ranked = Object.keys(raw).sort((a, b) => raw[b] - raw[a]);
+
+  // 3) D&D 스탠다드 어레이 톤으로 분배: 주요(16-18) / 보조(12-15) / 약점(8-10)
+  //    상위 2개 = 주요, 중위 2개 = 보조, 하위 2개 = 약점
+  const tierBase = [17, 16, 14, 12, 10, 8];
+
+  const result = {};
+  ranked.forEach((key, i) => {
+    let val = tierBase[i];
+    const r = raw[key];
+    // 최상위 스탯이 강하게 쏠리면 18로 올림
+    if (i === 0 && r >= 4) val = 18;
+    // 최하위 스탯이 그렇게까지 낮지 않으면 9로 완화
+    if (i === 5 && r > -2) val = 9;
+    result[key] = val;
+  });
+
+  // STR/DEX/CON/INT/WIS/CHA 순서로 반환
+  return {
+    STR: result.STR, DEX: result.DEX, CON: result.CON,
+    INT: result.INT, WIS: result.WIS, CHA: result.CHA,
+  };
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const $ = sel => document.querySelector(sel);
+
+function showScreen(id) {
+  ['screen-loading', 'screen-start', 'screen-question', 'screen-result', 'screen-races', 'screen-classes'].forEach(s => {
+    $('#' + s).hidden = (s !== id);
+  });
+  // restart fade animation
+  const el = $('#' + id);
+  el.style.animation = 'none';
+  void el.offsetWidth;
+  el.style.animation = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderQuestion() {
+  const i = state.current;
+  const q = SHUFFLED_QUESTIONS[i];
+  $('#progress-text').textContent = `QUESTION ${i + 1} / ${QUESTIONS.length}`;
+  $('#progress-fill').style.width = `${((i + 1) / QUESTIONS.length) * 100}%`;
+  $('#question-text').textContent = `"${q.text}"`;
+
+  const answersEl = $('#answers');
+  answersEl.innerHTML = '';
+  ANSWER_OPTIONS.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.innerHTML = `<span class="answer-dot"></span><span>${opt.label}</span>`;
+    btn.addEventListener('click', () => selectAnswer(opt.value));
+    answersEl.appendChild(btn);
+  });
+
+  $('#btn-back').style.visibility = i === 0 ? 'hidden' : 'visible';
+
+  // 슬라이드 인 애니메이션 재트리거
+  const content = $('#question-content');
+  content.classList.remove('animate-in');
+  void content.offsetWidth;
+  content.classList.add('animate-in');
+}
+
+function selectAnswer(value) {
+  // SHUFFLE_MAP을 통해 원본 인덱스 위치에 답을 저장
+  const originalIdx = SHUFFLE_MAP[state.current];
+  state.answers[originalIdx] = value;
+  if (state.current < QUESTIONS.length - 1) {
+    state.current++;
+    renderQuestion();
+  } else {
+    renderResult();
+    showScreen('screen-result');
+  }
+}
+
+/* ============ 레이더 차트 빌더 ============ */
+const RADAR_AXES = [
+  { key: 'chaos',  neg: '질서', pos: '혼돈' },
+  { key: 'evil',   neg: '선',   pos: '악' },
+  { key: 'body',   neg: '지성', pos: '신체' },
+  { key: 'subtle', neg: '직설', pos: '책략' },
+  { key: 'solo',   neg: '사교', pos: '고독' },
+  { key: 'civil',  neg: '야생', pos: '문명' },
+  { key: 'arcane', neg: '평범', pos: '마법' },
+];
+
+function buildRadar(scores) {
+  const N = RADAR_AXES.length;
+  const cx = 100, cy = 100;
+  const maxR = 62;
+  const labelR = 86;
+
+  const ringPoints = (ratio) => RADAR_AXES.map((_, i) => {
+    const a = (i / N) * 2 * Math.PI - Math.PI / 2;
+    return `${cx + Math.cos(a) * maxR * ratio},${cy + Math.sin(a) * maxR * ratio}`;
+  }).join(' ');
+
+  const dataPoints = RADAR_AXES.map((axis, i) => {
+    const a = (i / N) * 2 * Math.PI - Math.PI / 2;
+    const mag = Math.min(Math.abs(scores[axis.key]) / 10, 1);
+    return `${cx + Math.cos(a) * maxR * mag},${cy + Math.sin(a) * maxR * mag}`;
+  }).join(' ');
+
+  const axisLines = RADAR_AXES.map((_, i) => {
+    const a = (i / N) * 2 * Math.PI - Math.PI / 2;
+    return `<line class="radar-axis-line" x1="${cx}" y1="${cy}" x2="${cx + Math.cos(a) * maxR}" y2="${cy + Math.sin(a) * maxR}" />`;
+  }).join('');
+
+  const labels = RADAR_AXES.map((axis, i) => {
+    const a = (i / N) * 2 * Math.PI - Math.PI / 2;
+    const lx = cx + Math.cos(a) * labelR;
+    const ly = cy + Math.sin(a) * labelR;
+    const score = scores[axis.key];
+    const label = score >= 0 ? axis.pos : axis.neg;
+    return `<text class="radar-label" x="${lx}" y="${ly}" dy="3">${label}</text>`;
+  }).join('');
+
+  return `
+    <polygon class="radar-bg-poly"   points="${ringPoints(1)}" />
+    <polygon class="radar-grid-poly" points="${ringPoints(0.66)}" />
+    <polygon class="radar-grid-poly" points="${ringPoints(0.33)}" />
+    ${axisLines}
+    <polygon class="radar-data-poly" points="${dataPoints}" />
+    ${labels}
+  `;
+}
+
+/* ============ 3×3 성향 그리드 빌더 ============ */
+const ALIGNMENT_GRID_ORDER = ['LG','NG','CG','LN','TN','CN','LE','NE','CE'];
+
+function buildAlignmentGrid(activeKey) {
+  const grid = $('#align-grid');
+  grid.innerHTML = '';
+  ALIGNMENT_GRID_ORDER.forEach((k, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'align-cell' + (k === activeKey ? ' active' : '');
+    cell.textContent = k;
+    cell.style.animation = `fadeInUp 0.4s ease-out ${0.45 + i * 0.04}s both`;
+    grid.appendChild(cell);
+  });
+}
+
+function renderResult() {
+  const scores = computeScores();
+  const raceName = nearestMatch(scores, RACES);
+  const className = nearestMatch(scores, CLASSES);
+  const alignKey = getAlignment(scores);
+  const stats = computeStats(scores);
+
+  const align = ALIGNMENTS[alignKey];
+  const race = RACES[raceName];
+  const cls = CLASSES[className];
+
+  $('#result-title-en').textContent = `The ${align.en} ${race.en} ${cls.en}`;
+  $('#result-title-kr').textContent = `${align.kr} · ${raceName} ${className}`;
+
+  $('#race-name').textContent = `${raceName} (${race.en})`;
+  $('#race-desc').textContent = RACE_DESCS[raceName];
+
+  $('#class-name').textContent = `${className} (${cls.en})`;
+  $('#class-desc').textContent = CLASS_DESCS[className];
+
+  $('#align-name').textContent = `${align.kr} · ${align.en}`;
+  $('#align-desc').textContent = align.desc;
+
+  // 레이더 차트 렌더 + 블룸 애니메이션 재트리거
+  const radar = $('#radar-chart');
+  radar.innerHTML = buildRadar(scores);
+  radar.style.animation = 'none';
+  void radar.offsetWidth;
+  radar.style.animation = 'radarBloom 0.7s ease-out 0.35s both';
+
+  // 성향 그리드 렌더
+  buildAlignmentGrid(alignKey);
+
+  // 결과 블록 순차 페이드인 (라벨/이름/설명은 블록과 함께 페이드)
+  const blocks = document.querySelectorAll('#screen-result .result-block');
+  blocks.forEach((block, i) => {
+    block.style.animation = 'none';
+    void block.offsetWidth;
+    block.style.animation = `fadeInUp 0.55s ease-out ${0.15 + i * 0.13}s both`;
+  });
+
+  // 능력치 행 — 행 자체 순차 등장 + 바 채움 시차
+  const statsEl = $('#stats');
+  statsEl.innerHTML = '';
+  const peak = Math.max(...Object.values(stats));
+  Object.entries(stats).forEach(([name, val], idx) => {
+    const isPeak = val === peak;
+    const row = document.createElement('div');
+    row.className = 'stat-row' + (isPeak ? ' peak' : '');
+    const pct = ((val - 8) / 10) * 100;
+    row.innerHTML = `
+      <span class="stat-name">${name}</span>
+      <div class="stat-bar"><div class="stat-fill" style="width:0%"></div></div>
+      <span class="stat-value">${val}</span>
+    `;
+    row.style.animation = `fadeInUp 0.4s ease-out ${0.85 + idx * 0.07}s both`;
+    statsEl.appendChild(row);
+    setTimeout(() => {
+      row.querySelector('.stat-fill').style.width = pct + '%';
+    }, 1050 + idx * 70);
+  });
+
+  // 결과를 URL에 인코딩 (공유용) — 프리뷰/file:// 환경에선 막힐 수 있으므로 try
+  try {
+    const answerCodes = state.answers
+      .map(a => ANSWER_OPTIONS.findIndex(o => o.value === a))
+      .join('');
+    history.replaceState(null, '', `?a=${answerCodes}`);
+  } catch (e) {
+    console.warn('URL 업데이트 실패 (프리뷰 환경일 수 있음):', e);
+  }
+}
+
+/* ============================================================
+   SHARE
+   ============================================================ */
+async function shareResult() {
+  const url = window.location.href;
+  const titleEn = $('#result-title-en').textContent;
+  const titleKr = $('#result-title-kr').textContent;
+  const shareText = `🎲 D&D 페르소나 메이커 결과\n\n${titleEn}\n${titleKr}\n\n${url}`;
+  const msgEl = $('#share-msg');
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'D&D 페르소나 메이커', text: shareText, url });
+      msgEl.textContent = '';
+      return;
+    } catch { /* 취소되면 클립보드로 fallback */ }
+  }
+
+  try {
+    await navigator.clipboard.writeText(shareText);
+    msgEl.textContent = '✓ 클립보드에 복사되었습니다';
+    setTimeout(() => { msgEl.textContent = ''; }, 2500);
+  } catch {
+    msgEl.textContent = '복사에 실패했습니다. URL을 직접 복사해주세요.';
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function startQuiz() {
+  state.current = 0;
+  state.answers = new Array(QUESTIONS.length).fill(null);
+  shuffleQuestions();   // 매 세션마다 질문 순서 랜덤화
+  renderQuestion();
+  showScreen('screen-question');
+}
+
+function loadFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('a');
+  if (!code || code.length !== QUESTIONS.length) return false;
+  const answers = [...code].map(ch => {
+    const idx = parseInt(ch, 10);
+    if (isNaN(idx) || !ANSWER_OPTIONS[idx]) return null;
+    return ANSWER_OPTIONS[idx].value;
+  });
+  if (answers.includes(null)) return false;
+  state.answers = answers;
+  renderResult();
+  return true;
+}
+
+/* ============================================================
+   BROWSE (종족·직업 도감)
+   ============================================================ */
+const browseInit = { races: false, classes: false };
+
+function renderBrowseList(listId, data, descs) {
+  const el = $('#' + listId);
+  el.innerHTML = '';
+  for (const [name, info] of Object.entries(data)) {
+    const item = document.createElement('div');
+    item.className = 'browse-item';
+    const desc = descs[name] || '';
+    item.innerHTML = `
+      <div class="browse-item-header">
+        <span class="browse-item-name">${name}</span>
+        <span class="browse-item-en">${info.en}</span>
+      </div>
+      <div class="browse-item-desc">${desc}</div>
+    `;
+    el.appendChild(item);
+  }
+}
+
+function showRaces() {
+  if (!browseInit.races) {
+    renderBrowseList('races-list', RACES, RACE_DESCS);
+    browseInit.races = true;
+  }
+  showScreen('screen-races');
+}
+
+function showClasses() {
+  if (!browseInit.classes) {
+    renderBrowseList('classes-list', CLASSES, CLASS_DESCS);
+    browseInit.classes = true;
+  }
+  showScreen('screen-classes');
+}
+
+/* ============================================================
+   BGM (배경음악)
+   ============================================================ */
+const bgm = new Audio('bgm.mp3');
+bgm.loop = true;
+bgm.volume = 0.35;
+let bgmOn = true;
+const bgmToggleEl = $('#bgm-toggle');
+
+function setBgmState(on) {
+  bgmOn = on;
+  if (on) {
+    bgm.play().catch(() => { /* autoplay 차단되면 다음 클릭에서 재시도 */ });
+    bgmToggleEl.classList.remove('off');
+    bgmToggleEl.setAttribute('aria-label', 'BGM 끄기');
+  } else {
+    bgm.pause();
+    bgmToggleEl.classList.add('off');
+    bgmToggleEl.setAttribute('aria-label', 'BGM 켜기');
+  }
+}
+
+bgmToggleEl.addEventListener('click', () => setBgmState(!bgmOn));
+
+/* ============================================================
+   EVENT BINDINGS
+   ============================================================ */
+$('#btn-start').addEventListener('click', startQuiz);
+$('#btn-back').addEventListener('click', () => {
+  if (state.current > 0) {
+    state.current--;
+    renderQuestion();
+  }
+});
+$('#btn-restart').addEventListener('click', () => {
+  try { history.replaceState(null, '', window.location.pathname); } catch (e) {}
+  showScreen('screen-start');
+});
+$('#btn-share').addEventListener('click', shareResult);
+$('#btn-races').addEventListener('click', showRaces);
+$('#btn-classes').addEventListener('click', showClasses);
+$('#btn-back-races').addEventListener('click', () => showScreen('screen-start'));
+$('#btn-back-classes').addEventListener('click', () => showScreen('screen-start'));
+
+/* ============================================================
+   INIT — 항상 로딩(인트로) 화면부터 시작
+   ============================================================ */
+const _hasResultInUrl = loadFromUrl();
+const _postLoadingTarget = _hasResultInUrl ? 'screen-result' : 'screen-start';
+
+$('#btn-enter').addEventListener('click', () => {
+  if (bgmOn) bgm.play().catch(() => {});
+  showScreen(_postLoadingTarget);
+});
+
+showScreen('screen-loading');
+</script>
+</body>
+</html>
